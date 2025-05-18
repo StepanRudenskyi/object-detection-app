@@ -55,6 +55,16 @@ const MOCK_DETECTION_RESULTS = {
   ],
 };
 
+// Configure the base URL for the real API calls
+// When running locally outside Docker Compose, this might be 'http://localhost:8000'
+// When running inside Docker Compose, use the service name and port: 'http://backend:8000'
+// You might use environment variables or other configuration methods to handle this switch
+const API_BASE_URL = "http://backend:8000"; // Assuming your backend runs on port 8000
+
+const api = axios.create({
+  baseURL: API_BASE_URL,
+});
+
 /**
  * API service for object detection
  */
@@ -68,7 +78,7 @@ const apiService = {
       return MOCK_MODELS;
     }
     // Real API call
-    const response = await axios.get("/models");
+    const response = await api.get("/models");
     return response.data;
   },
 
@@ -92,7 +102,7 @@ const apiService = {
     }
 
     // Real API call
-    const response = await axios.post("/detect", {
+    const response = await api.post("/detect", {
       model: model,
       image_uri: imageUri,
     });
