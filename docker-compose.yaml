@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: . # Build the image using the Dockerfile in the current directory
+      dockerfile: Dockerfile # specify the Dockerfile name (optional if named Dockerfile)
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+  # Service for the Python backend (currently a mock placeholder)
+  backend:
+    # Using a simple Alpine Python image and a sleep command to keep the container running
+    # In a real scenario, you would replace this with your Python backend image
+    image: python:alpine
+    command: ["sleep", "infinity"] # Command to keep the container running indefinitely
+    # We don't expose ports to the host here, as the frontend will communicate
+    # with the backend using the service name 'backend' within the Docker network.
+    # If you needed to access the backend directly from the host, you would add a 'ports' section here.
+
+# Docker networks are created by default by docker-compose, allowing services
+# to communicate with each other using their service names (e.g., 'backend').
